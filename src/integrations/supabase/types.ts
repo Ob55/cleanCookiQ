@@ -162,6 +162,56 @@ export type Database = {
           },
         ]
       }
+      dmrv_records: {
+        Row: {
+          co2_verified_tonnes: number | null
+          created_at: string
+          id: string
+          meals_verified: number | null
+          project_id: string
+          recorded_at: string
+          status: Database["public"]["Enums"]["dmrv_status"]
+          updated_at: string
+          usage_hours: number | null
+          verification_method: Database["public"]["Enums"]["verification_method"]
+          verifier_id: string | null
+        }
+        Insert: {
+          co2_verified_tonnes?: number | null
+          created_at?: string
+          id?: string
+          meals_verified?: number | null
+          project_id: string
+          recorded_at?: string
+          status?: Database["public"]["Enums"]["dmrv_status"]
+          updated_at?: string
+          usage_hours?: number | null
+          verification_method?: Database["public"]["Enums"]["verification_method"]
+          verifier_id?: string | null
+        }
+        Update: {
+          co2_verified_tonnes?: number | null
+          created_at?: string
+          id?: string
+          meals_verified?: number | null
+          project_id?: string
+          recorded_at?: string
+          status?: Database["public"]["Enums"]["dmrv_status"]
+          updated_at?: string
+          usage_hours?: number | null
+          verification_method?: Database["public"]["Enums"]["verification_method"]
+          verifier_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dmrv_records_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       expressions_of_interest: {
         Row: {
           created_at: string
@@ -213,8 +263,70 @@ export type Database = {
           },
         ]
       }
+      financing_applications: {
+        Row: {
+          amount_requested_ksh: number | null
+          created_at: string
+          decision_at: string | null
+          disbursed_at: string | null
+          disbursement_amount_ksh: number | null
+          financing_type: Database["public"]["Enums"]["financing_type"]
+          funder_organisation_id: string | null
+          id: string
+          institution_id: string
+          status: Database["public"]["Enums"]["financing_status"]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_requested_ksh?: number | null
+          created_at?: string
+          decision_at?: string | null
+          disbursed_at?: string | null
+          disbursement_amount_ksh?: number | null
+          financing_type: Database["public"]["Enums"]["financing_type"]
+          funder_organisation_id?: string | null
+          id?: string
+          institution_id: string
+          status?: Database["public"]["Enums"]["financing_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_requested_ksh?: number | null
+          created_at?: string
+          decision_at?: string | null
+          disbursed_at?: string | null
+          disbursement_amount_ksh?: number | null
+          financing_type?: Database["public"]["Enums"]["financing_type"]
+          funder_organisation_id?: string | null
+          id?: string
+          institution_id?: string
+          status?: Database["public"]["Enums"]["financing_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_applications_funder_organisation_id_fkey"
+            columns: ["funder_organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financing_applications_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institutions: {
         Row: {
+          annual_savings_ksh: number | null
+          co2_reduction_tonnes_pa: number | null
           contact_email: string | null
           contact_person: string | null
           contact_phone: string | null
@@ -222,21 +334,30 @@ export type Database = {
           created_at: string
           created_by: string | null
           current_fuel: Database["public"]["Enums"]["fuel_type"] | null
+          fuel_of_choice: string | null
           id: string
           institution_type: Database["public"]["Enums"]["institution_type"]
           latitude: number | null
           longitude: number | null
           meals_per_day: number | null
+          meals_served_per_day: number | null
           name: string
           notes: string | null
           number_of_staff: number | null
           number_of_students: number | null
           organisation_id: string | null
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"]
+          recommended_solution: string | null
           sub_county: string | null
+          ta_required: boolean | null
+          ta_resource_window_end: string | null
+          ta_resource_window_start: string | null
+          ta_type_needed: string[] | null
           updated_at: string
         }
         Insert: {
+          annual_savings_ksh?: number | null
+          co2_reduction_tonnes_pa?: number | null
           contact_email?: string | null
           contact_person?: string | null
           contact_phone?: string | null
@@ -244,21 +365,30 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           current_fuel?: Database["public"]["Enums"]["fuel_type"] | null
+          fuel_of_choice?: string | null
           id?: string
           institution_type?: Database["public"]["Enums"]["institution_type"]
           latitude?: number | null
           longitude?: number | null
           meals_per_day?: number | null
+          meals_served_per_day?: number | null
           name: string
           notes?: string | null
           number_of_staff?: number | null
           number_of_students?: number | null
           organisation_id?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
+          recommended_solution?: string | null
           sub_county?: string | null
+          ta_required?: boolean | null
+          ta_resource_window_end?: string | null
+          ta_resource_window_start?: string | null
+          ta_type_needed?: string[] | null
           updated_at?: string
         }
         Update: {
+          annual_savings_ksh?: number | null
+          co2_reduction_tonnes_pa?: number | null
           contact_email?: string | null
           contact_person?: string | null
           contact_phone?: string | null
@@ -266,18 +396,25 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           current_fuel?: Database["public"]["Enums"]["fuel_type"] | null
+          fuel_of_choice?: string | null
           id?: string
           institution_type?: Database["public"]["Enums"]["institution_type"]
           latitude?: number | null
           longitude?: number | null
           meals_per_day?: number | null
+          meals_served_per_day?: number | null
           name?: string
           notes?: string | null
           number_of_staff?: number | null
           number_of_students?: number | null
           organisation_id?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"]
+          recommended_solution?: string | null
           sub_county?: string | null
+          ta_required?: boolean | null
+          ta_resource_window_end?: string | null
+          ta_resource_window_start?: string | null
+          ta_type_needed?: string[] | null
           updated_at?: string
         }
         Relationships: [
@@ -286,6 +423,63 @@ export type Database = {
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opex_contracts: {
+        Row: {
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at: string
+          end_date: string | null
+          id: string
+          monthly_value_ksh: number | null
+          project_id: string
+          provider_id: string | null
+          renewal_alert_days: number | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["contract_status"]
+          updated_at: string
+        }
+        Insert: {
+          contract_type?: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          monthly_value_ksh?: number | null
+          project_id: string
+          provider_id?: string | null
+          renewal_alert_days?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          updated_at?: string
+        }
+        Update: {
+          contract_type?: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          monthly_value_ksh?: number | null
+          project_id?: string
+          provider_id?: string | null
+          renewal_alert_days?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opex_contracts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opex_contracts_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
             referencedColumns: ["id"]
           },
         ]
@@ -376,6 +570,50 @@ export type Database = {
         }
         Relationships: []
       }
+      procurement_rfqs: {
+        Row: {
+          created_at: string
+          id: string
+          programme_id: string
+          published_at: string | null
+          scope_description: string | null
+          status: Database["public"]["Enums"]["rfq_status"]
+          submission_deadline: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          programme_id: string
+          published_at?: string | null
+          scope_description?: string | null
+          status?: Database["public"]["Enums"]["rfq_status"]
+          submission_deadline?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          programme_id?: string
+          published_at?: string | null
+          scope_description?: string | null
+          status?: Database["public"]["Enums"]["rfq_status"]
+          submission_deadline?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "procurement_rfqs_programme_id_fkey"
+            columns: ["programme_id"]
+            isOneToOne: false
+            referencedRelation: "programmes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           approval_status: Database["public"]["Enums"]["approval_status"]
@@ -419,6 +657,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      programmes: {
+        Row: {
+          county_scope: string[] | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          programme_manager_id: string | null
+          status: Database["public"]["Enums"]["programme_status"]
+          target_institution_count: number | null
+          total_budget_ksh: number | null
+          updated_at: string
+        }
+        Insert: {
+          county_scope?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          programme_manager_id?: string | null
+          status?: Database["public"]["Enums"]["programme_status"]
+          target_institution_count?: number | null
+          total_budget_ksh?: number | null
+          updated_at?: string
+        }
+        Update: {
+          county_scope?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          programme_manager_id?: string | null
+          status?: Database["public"]["Enums"]["programme_status"]
+          target_institution_count?: number | null
+          total_budget_ksh?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       project_milestones: {
         Row: {
@@ -542,8 +819,13 @@ export type Database = {
           counties_served: string[] | null
           created_at: string
           id: string
+          mou_signed_at: string | null
           name: string
+          nda_signed_at: string | null
           organisation_id: string | null
+          provider_category:
+            | Database["public"]["Enums"]["provider_category"]
+            | null
           rating: number | null
           services: string[] | null
           technology_types: string[] | null
@@ -558,8 +840,13 @@ export type Database = {
           counties_served?: string[] | null
           created_at?: string
           id?: string
+          mou_signed_at?: string | null
           name: string
+          nda_signed_at?: string | null
           organisation_id?: string | null
+          provider_category?:
+            | Database["public"]["Enums"]["provider_category"]
+            | null
           rating?: number | null
           services?: string[] | null
           technology_types?: string[] | null
@@ -574,8 +861,13 @@ export type Database = {
           counties_served?: string[] | null
           created_at?: string
           id?: string
+          mou_signed_at?: string | null
           name?: string
+          nda_signed_at?: string | null
           organisation_id?: string | null
+          provider_category?:
+            | Database["public"]["Enums"]["provider_category"]
+            | null
           rating?: number | null
           services?: string[] | null
           technology_types?: string[] | null
@@ -650,6 +942,114 @@ export type Database = {
           },
         ]
       }
+      rfq_responses: {
+        Row: {
+          created_at: string
+          id: string
+          proposal_summary: string | null
+          proposed_value_ksh: number | null
+          provider_id: string
+          rfq_id: string
+          status: Database["public"]["Enums"]["rfq_response_status"]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          proposal_summary?: string | null
+          proposed_value_ksh?: number | null
+          provider_id: string
+          rfq_id: string
+          status?: Database["public"]["Enums"]["rfq_response_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          proposal_summary?: string | null
+          proposed_value_ksh?: number | null
+          provider_id?: string
+          rfq_id?: string
+          status?: Database["public"]["Enums"]["rfq_response_status"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rfq_responses_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_responses_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "procurement_rfqs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_to_provider_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          priority: Database["public"]["Enums"]["ticket_priority"]
+          project_id: string
+          raised_by: string | null
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["ticket_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to_provider_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["ticket_priority"]
+          project_id: string
+          raised_by?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to_provider_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["ticket_priority"]
+          project_id?: string
+          raised_by?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_assigned_to_provider_id_fkey"
+            columns: ["assigned_to_provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_config: {
         Row: {
           config_key: string
@@ -679,6 +1079,47 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: []
+      }
+      ta_providers: {
+        Row: {
+          availability_status: Database["public"]["Enums"]["ta_availability"]
+          counties_served: string[] | null
+          created_at: string
+          expertise_areas: string[] | null
+          id: string
+          organisation_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          availability_status?: Database["public"]["Enums"]["ta_availability"]
+          counties_served?: string[] | null
+          created_at?: string
+          expertise_areas?: string[] | null
+          id?: string
+          organisation_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          availability_status?: Database["public"]["Enums"]["ta_availability"]
+          counties_served?: string[] | null
+          created_at?: string
+          expertise_areas?: string[] | null
+          id?: string
+          organisation_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ta_providers_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -712,9 +1153,32 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "manager" | "field_agent" | "viewer"
+      app_role:
+        | "admin"
+        | "manager"
+        | "field_agent"
+        | "viewer"
+        | "ta_provider"
+        | "financing_partner"
+        | "programme_manager"
+        | "dmrv_verifier"
       approval_status: "pending" | "approved" | "rejected"
       assessment_status: "draft" | "submitted" | "reviewed" | "approved"
+      contract_status: "active" | "expiring_soon" | "expired" | "terminated"
+      contract_type: "maintenance" | "fuel_supply" | "spare_parts" | "other"
+      dmrv_status: "pending" | "verified" | "disputed"
+      financing_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "disbursed"
+        | "rejected"
+      financing_type:
+        | "grant"
+        | "concessional_debt"
+        | "commercial_debt"
+        | "equity"
       fuel_type:
         | "firewood"
         | "charcoal"
@@ -739,6 +1203,28 @@ export type Database = {
         | "contracted"
         | "installed"
         | "monitoring"
+        | "contacted"
+        | "scored"
+        | "least_cost_path_assigned"
+        | "provider_matched"
+        | "financed"
+        | "in_delivery"
+        | "monitored_dmrv"
+      programme_status: "planning" | "procurement" | "active" | "completed"
+      provider_category:
+        | "equipment_provider"
+        | "installation_technician"
+        | "logistics_provider"
+        | "service_product_provider"
+      rfq_response_status: "submitted" | "shortlisted" | "awarded" | "rejected"
+      rfq_status: "draft" | "published" | "closed" | "awarded"
+      ta_availability: "available" | "committed" | "unavailable"
+      ticket_priority: "low" | "medium" | "high" | "critical"
+      ticket_status: "open" | "in_progress" | "resolved" | "closed"
+      verification_method:
+        | "iot_sensor"
+        | "manual_survey"
+        | "platform_self_report"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -866,9 +1352,35 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "manager", "field_agent", "viewer"],
+      app_role: [
+        "admin",
+        "manager",
+        "field_agent",
+        "viewer",
+        "ta_provider",
+        "financing_partner",
+        "programme_manager",
+        "dmrv_verifier",
+      ],
       approval_status: ["pending", "approved", "rejected"],
       assessment_status: ["draft", "submitted", "reviewed", "approved"],
+      contract_status: ["active", "expiring_soon", "expired", "terminated"],
+      contract_type: ["maintenance", "fuel_supply", "spare_parts", "other"],
+      dmrv_status: ["pending", "verified", "disputed"],
+      financing_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "disbursed",
+        "rejected",
+      ],
+      financing_type: [
+        "grant",
+        "concessional_debt",
+        "commercial_debt",
+        "equity",
+      ],
       fuel_type: ["firewood", "charcoal", "lpg", "biogas", "electric", "other"],
       institution_type: [
         "school",
@@ -888,6 +1400,30 @@ export const Constants = {
         "contracted",
         "installed",
         "monitoring",
+        "contacted",
+        "scored",
+        "least_cost_path_assigned",
+        "provider_matched",
+        "financed",
+        "in_delivery",
+        "monitored_dmrv",
+      ],
+      programme_status: ["planning", "procurement", "active", "completed"],
+      provider_category: [
+        "equipment_provider",
+        "installation_technician",
+        "logistics_provider",
+        "service_product_provider",
+      ],
+      rfq_response_status: ["submitted", "shortlisted", "awarded", "rejected"],
+      rfq_status: ["draft", "published", "closed", "awarded"],
+      ta_availability: ["available", "committed", "unavailable"],
+      ticket_priority: ["low", "medium", "high", "critical"],
+      ticket_status: ["open", "in_progress", "resolved", "closed"],
+      verification_method: [
+        "iot_sensor",
+        "manual_survey",
+        "platform_self_report",
       ],
     },
   },

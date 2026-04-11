@@ -3,21 +3,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Building2, Factory, Banknote, FlaskConical, Landmark, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
+import { Building2, Factory, Banknote, FlaskConical, Landmark, GraduationCap, Briefcase, FolderKanban, Shield, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const orgTypes = [
   { value: "institution", label: "Institution", desc: "School, hospital, prison, factory", icon: Building2 },
   { value: "supplier", label: "Supplier / Provider", desc: "Equipment, installation, maintenance", icon: Factory },
-  { value: "funder", label: "Funder", desc: "Finance partner or investor", icon: Banknote },
+  { value: "funder", label: "Funder / Financing Partner", desc: "Finance partner or investor", icon: Banknote },
   { value: "csr", label: "CSR Partner", desc: "Corporate social responsibility", icon: Landmark },
   { value: "researcher", label: "Researcher", desc: "Academic or research institution", icon: FlaskConical },
+];
+
+const roleTypes = [
+  { value: "ta_provider", label: "TA Provider", desc: "Provide technical assistance to institutions", icon: GraduationCap, forOrg: "supplier" },
+  { value: "financing_partner", label: "Financing Partner", desc: "Review and fund grant/debt applications", icon: Banknote, forOrg: "funder" },
+  { value: "programme_manager", label: "Programme Manager", desc: "Manage multi-institution programmes", icon: FolderKanban, forOrg: null },
+  { value: "dmrv_verifier", label: "dMRV Verifier", desc: "Submit and verify monitoring records", icon: Shield, forOrg: null },
 ];
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [orgType, setOrgType] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
   const [orgName, setOrgName] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,6 +48,7 @@ export default function RegisterPage() {
           org_type: orgType,
           org_name: orgName,
           phone,
+          requested_role: selectedRole || undefined,
         },
       },
     });
@@ -50,6 +59,8 @@ export default function RegisterPage() {
       navigate("/auth/verify-email");
     }
   };
+
+  const availableRoles = roleTypes.filter(r => !r.forOrg || r.forOrg === orgType);
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
@@ -65,7 +76,7 @@ export default function RegisterPage() {
           </Link>
           <h1 className="text-2xl font-display font-bold">Create your account</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {step === 1 ? "Select your organisation type" : "Enter your details"}
+            {step === 1 ? "Select your organisation type" : step === 2 ? "Select your role (optional)" : "Enter your details"}
           </p>
         </div>
 
@@ -95,9 +106,38 @@ export default function RegisterPage() {
                 Continue <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
+          ) : step === 2 ? (
+            <div className="space-y-3">
+              <button type="button" onClick={() => setStep(1)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-2">
+                <ArrowLeft className="h-3 w-3" /> Back
+              </button>
+              <p className="text-sm text-muted-foreground mb-3">Select a specialised role if applicable, or skip to continue.</p>
+              {availableRoles.map((role) => (
+                <button
+                  key={role.value}
+                  onClick={() => setSelectedRole(selectedRole === role.value ? "" : role.value)}
+                  className={`w-full flex items-center gap-4 p-4 rounded-lg border transition-colors text-left ${
+                    selectedRole === role.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
+                  }`}
+                >
+                  <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${
+                    selectedRole === role.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  }`}>
+                    <role.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">{role.label}</p>
+                    <p className="text-xs text-muted-foreground">{role.desc}</p>
+                  </div>
+                </button>
+              ))}
+              <Button className="w-full mt-4 bg-primary text-primary-foreground" onClick={() => setStep(3)}>
+                {selectedRole ? "Continue" : "Skip & Continue"} <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           ) : (
             <form className="space-y-4" onSubmit={handleRegister}>
-              <button type="button" onClick={() => setStep(1)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-2">
+              <button type="button" onClick={() => setStep(2)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-2">
                 <ArrowLeft className="h-3 w-3" /> Back
               </button>
               <div>

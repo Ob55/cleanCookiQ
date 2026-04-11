@@ -33,7 +33,11 @@ import BDDashboard from "@/pages/admin/BDDashboard";
 import ScoringConfig from "@/pages/admin/ScoringConfig";
 import CostConfig from "@/pages/admin/CostConfig";
 import AuditLog from "@/pages/admin/AuditLog";
-import AdminPlaceholder from "@/pages/admin/AdminPlaceholder";
+import PortfolioManagement from "@/pages/admin/PortfolioManagement";
+import ProgramManagement from "@/pages/admin/ProgramManagement";
+
+import TADashboard from "@/pages/ta/TADashboard";
+import FinancingPage from "@/pages/FinancingPage";
 
 import NotFound from "@/pages/NotFound";
 
@@ -64,6 +68,16 @@ const App = () => (
             <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
+            {/* TA Dashboard (protected for ta_provider role) */}
+            <Route path="/ta/dashboard" element={
+              <ProtectedRoute><TADashboard /></ProtectedRoute>
+            } />
+
+            {/* Financing (protected for authenticated users) */}
+            <Route path="/financing" element={
+              <ProtectedRoute><FinancingPage /></ProtectedRoute>
+            } />
+
             {/* Admin pages (protected) */}
             <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
               <Route path="/admin/pipeline" element={<PipelineDashboard />} />
@@ -73,6 +87,8 @@ const App = () => (
               <Route path="/admin/assessments" element={<AssessmentQueue />} />
               <Route path="/admin/opportunities" element={<OpportunityManagement />} />
               <Route path="/admin/bd" element={<BDDashboard />} />
+              <Route path="/admin/portfolio" element={<PortfolioManagement />} />
+              <Route path="/admin/programs" element={<ProgramManagement />} />
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/scoring/config" element={<ScoringConfig />} />
               <Route path="/admin/engine/costs" element={<CostConfig />} />
