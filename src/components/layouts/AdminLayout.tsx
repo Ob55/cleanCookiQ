@@ -1,7 +1,8 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Building2, Users, ClipboardCheck, Settings,
-  BarChart3, FileText, Shield, TrendingUp, Factory, Menu, X, LogOut, Bell
+  BarChart3, FileText, Shield, TrendingUp, Factory, Menu, X, LogOut, Bell,
+  Briefcase, FolderKanban
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,8 @@ const adminNav = [
   { label: "Assessments", href: "/admin/assessments", icon: ClipboardCheck },
   { label: "Opportunities", href: "/admin/opportunities", icon: FileText },
   { label: "BD Dashboard", href: "/admin/bd", icon: BarChart3 },
+  { label: "Portfolio", href: "/admin/portfolio", icon: Briefcase },
+  { label: "Programs", href: "/admin/programs", icon: FolderKanban },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Scoring Config", href: "/admin/scoring/config", icon: Settings },
   { label: "Cost Tables", href: "/admin/engine/costs", icon: LayoutDashboard },
