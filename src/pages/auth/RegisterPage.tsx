@@ -16,6 +16,13 @@ const orgTypes = [
   { value: "researcher", label: "Researcher", desc: "Academic or research institution", icon: FlaskConical },
 ];
 
+const fundingTypes = [
+  { value: "grant", label: "Grant" },
+  { value: "loan", label: "Loan" },
+  { value: "equity", label: "Equity" },
+  { value: "csr_donation", label: "CSR Donation" },
+];
+
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [orgType, setOrgType] = useState("");
