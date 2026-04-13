@@ -107,19 +107,6 @@ export default function FunderInstitutionDetail() {
   const hasItems = checklist.filter(c => c.has);
   const missingItems = checklist.filter(c => !c.has);
 
-  const requestMutation = useMutation({
-    mutationFn: async (fields: string[]) => {
-      const fieldList = fields.join(", ");
-      await notifyInstitutionOwner(
-        inst.id,
-        "Please Complete Your Profile",
-        `A financing partner is interested in supporting ${inst.name} but needs more information. Please log in and fill in the following missing details: ${fieldList}. Complete your profile to unlock funding opportunities.`
-      );
-    },
-    onSuccess: () => toast.success("Request sent! The institution will be notified to fill in missing details."),
-    onError: () => toast.error("Failed to send request."),
-  });
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
