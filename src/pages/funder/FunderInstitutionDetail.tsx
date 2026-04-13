@@ -265,7 +265,7 @@ export default function FunderInstitutionDetail() {
                 variant="outline"
                 className="gap-1.5"
                 disabled={requestMutation.isPending}
-                onClick={() => requestMutation.mutate(missingItems.map(m => m.label))}
+                onClick={() => requestMutation.mutate({ institutionId: inst.id, institutionName: inst.name, fields: missingItems.map(m => m.label) })}
               >
                 {requestMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                 Request All Details
@@ -288,7 +288,7 @@ export default function FunderInstitutionDetail() {
                       variant="ghost"
                       className="h-7 px-2 text-xs"
                       disabled={requestMutation.isPending}
-                      onClick={() => requestMutation.mutate([item.label])}
+                      onClick={() => requestMutation.mutate({ institutionId: inst.id, institutionName: inst.name, fields: [item.label] })}
                     >
                       <Send className="h-3 w-3 mr-1" />
                       Request
