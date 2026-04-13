@@ -16,12 +16,56 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
+      setLoading(false);
       toast.error(error.message);
+      return;
+    }
+
+    const userId = authData.user?.id;
+    if (!userId) {
+      setLoading(false);
+      toast.error("Login failed");
+      return;
+    }
+
+    // Fetch roles to determine redirect
+    const { data: rolesData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+
+    const roles = rolesData?.map((r: any) => r.role) ?? [];
+
+    const isAdmin = roles.some((r: string) =>
+      ["admin", "manager", "field_agent"].includes(r)
+    );
+    const isInstitutionUser = roles.some((r: string) =>
+      ["institution_admin", "institution_user"].includes(r)
+    );
+
+    setLoading(false);
+    toast.success("Logged in successfully");
+
+    if (isAdmin) {
+      navigate("/admin/pipeline");
+    } else if (isInstitutionUser) {
+      // Check if setup is completed
+      const { data: inst } = await supabase
+        .from("institutions")
+        .select("setup_completed")
+        .eq("created_by", userId)
+        .maybeSingle();
+
+      if (inst?.setup_completed) {
+        navigate("/institution/dashboard");
+      } else {
+        navigate("/institution/setup");
+      }
     } else {
-      toast.success("Logged in successfully");
+      // Default: admin pipeline for other authenticated roles
       navigate("/admin/pipeline");
     }
   };

@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 import PublicLayout from "@/components/layouts/PublicLayout";
 import AdminLayout from "@/components/layouts/AdminLayout";
+import InstitutionLayout from "@/components/layouts/InstitutionLayout";
 
 import HomePage from "@/pages/HomePage";
 import MapPage from "@/pages/MapPage";
@@ -39,6 +40,13 @@ import ProgramManagement from "@/pages/admin/ProgramManagement";
 import TADashboard from "@/pages/ta/TADashboard";
 import FinancingPage from "@/pages/FinancingPage";
 
+import InstitutionSetup from "@/pages/institution/InstitutionSetup";
+import InstitutionDashboard from "@/pages/institution/InstitutionDashboard";
+import InstitutionProfile from "@/pages/institution/InstitutionProfile";
+import InstitutionPathway from "@/pages/institution/InstitutionPathway";
+import InstitutionDocuments from "@/pages/institution/InstitutionDocuments";
+import InstitutionSupport from "@/pages/institution/InstitutionSupport";
+
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,15 +76,29 @@ const App = () => (
             <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-            {/* TA Dashboard (protected for ta_provider role) */}
+            {/* TA Dashboard */}
             <Route path="/ta/dashboard" element={
               <ProtectedRoute><TADashboard /></ProtectedRoute>
             } />
 
-            {/* Financing (protected for authenticated users) */}
+            {/* Financing */}
             <Route path="/financing" element={
               <ProtectedRoute><FinancingPage /></ProtectedRoute>
             } />
+
+            {/* Institution Setup (no sidebar) */}
+            <Route path="/institution/setup" element={
+              <ProtectedRoute><InstitutionSetup /></ProtectedRoute>
+            } />
+
+            {/* Institution pages (with sidebar) */}
+            <Route element={<ProtectedRoute><InstitutionLayout /></ProtectedRoute>}>
+              <Route path="/institution/dashboard" element={<InstitutionDashboard />} />
+              <Route path="/institution/profile" element={<InstitutionProfile />} />
+              <Route path="/institution/pathway" element={<InstitutionPathway />} />
+              <Route path="/institution/documents" element={<InstitutionDocuments />} />
+              <Route path="/institution/support" element={<InstitutionSupport />} />
+            </Route>
 
             {/* Admin pages (protected) */}
             <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
