@@ -268,19 +268,17 @@ export default function InstitutionSetup() {
                 </div>
 
                 {/* Kitchen Condition */}
-                {hasDedicatedKitchen === "yes" && (
-                  <div>
-                    <Label>Kitchen Condition</Label>
-                    <Select value={kitchenCondition} onValueChange={setKitchenCondition}>
-                      <SelectTrigger className="mt-1"><SelectValue placeholder="Select condition" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="clean_ready">Clean and ready</SelectItem>
-                        <SelectItem value="minor_renovation">Minor renovation needed</SelectItem>
-                        <SelectItem value="major_renovation">Major renovation needed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
+                <div>
+                  <Label>Kitchen Condition</Label>
+                  <Select value={kitchenCondition} onValueChange={setKitchenCondition}>
+                    <SelectTrigger className="mt-1"><SelectValue placeholder="Select condition" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="clean_ready">Clean and ready</SelectItem>
+                      <SelectItem value="minor_renovation">Minor renovation needed</SelectItem>
+                      <SelectItem value="major_renovation">Major renovation needed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 {/* Financing Preference */}
                 <div>
