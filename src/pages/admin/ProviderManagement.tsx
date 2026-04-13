@@ -1,19 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Factory, Check, X, Loader2, Plus, Search, Star, FileText, Eye, Package, Wrench, Mail, Phone, Globe, MapPin, ShieldCheck } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Factory, Check, X, Loader2, Plus, Search, Star, Eye } from "lucide-react";
+import { useState } from "react";
 
 const categoryLabels: Record<string, string> = {
   equipment_provider: "Equipment Provider",
