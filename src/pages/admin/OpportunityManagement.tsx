@@ -201,6 +201,7 @@ export default function OpportunityManagement() {
                 <th className="text-left text-xs font-medium text-muted-foreground p-3">Institution</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3">Value</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3">Status</th>
+                <th className="text-left text-xs font-medium text-muted-foreground p-3">Created By</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3">Deadline</th>
                 <th className="text-left text-xs font-medium text-muted-foreground p-3">Actions</th>
               </tr>
