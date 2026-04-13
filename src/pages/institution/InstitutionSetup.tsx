@@ -349,6 +349,15 @@ export default function InstitutionSetup() {
               </div>
             </div>
 
+            {/* Transition Needs */}
+            <div className="pt-2 border-t">
+              <p className="text-sm font-semibold text-muted-foreground mb-3">Transition Needs</p>
+              <div>
+                <Label htmlFor="transition-needs">What do you need for transitioning to clean cooking?</Label>
+                <Textarea id="transition-needs" value={transitionNeeds} onChange={e => setTransitionNeeds(e.target.value)} placeholder="e.g. We need an industrial LPG stove system, installation support, and staff training..." rows={3} className="mt-1" />
+              </div>
+            </div>
+
             <Button type="submit" className="w-full min-h-[44px]" disabled={!isValid || loading}>
               {loading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
               Save &amp; Continue to Dashboard
