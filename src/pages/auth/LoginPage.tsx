@@ -45,13 +45,15 @@ export default function LoginPage() {
 
     const roles = rolesData?.map((r: { role: string }) => r.role) ?? [];
     const profileOrgType = profileData?.org_type ?? null;
+    const metadataOrgType = authData.user?.user_metadata?.org_type ?? null;
 
     const isAdmin = roles.some((r: string) =>
       ["admin", "manager", "field_agent"].includes(r)
     );
     const isInstitutionUser =
       roles.some((r: string) => ["institution_admin", "institution_user"].includes(r)) ||
-      profileOrgType === "institution";
+      profileOrgType === "institution" ||
+      metadataOrgType === "institution";
 
     setLoading(false);
     toast.success("Logged in successfully");
