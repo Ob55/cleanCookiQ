@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { calculateAssessmentScore } from "@/lib/assessmentScoring";
@@ -54,7 +55,8 @@ export default function InstitutionSetup() {
   const [contactPerson, setContactPerson] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
-
+  const [numberOfStaff, setNumberOfStaff] = useState("");
+  const [transitionNeeds, setTransitionNeeds] = useState("");
   // Assessment scoring fields
   const [numberOfStudents, setNumberOfStudents] = useState("");
   const [monthlyFuelSpend, setMonthlyFuelSpend] = useState("");
@@ -117,11 +119,13 @@ export default function InstitutionSetup() {
         contact_phone: contactPhone || null,
         contact_email: contactEmail || null,
         number_of_students: numberOfStudents ? parseInt(numberOfStudents) : null,
+        number_of_staff: numberOfStaff ? parseInt(numberOfStaff) : null,
         monthly_fuel_spend: monthlyFuelSpend ? parseFloat(monthlyFuelSpend) : null,
         has_dedicated_kitchen: kitchenBool,
         kitchen_condition: kitchenCondition || null,
         financing_preference: financingPreference || null,
         financial_decision_maker: financialDecisionMaker || null,
+        transition_needs: transitionNeeds || null,
         assessment_score: score,
         assessment_category: category,
         setup_completed: true,
@@ -197,6 +201,12 @@ export default function InstitutionSetup() {
               <Input id="num-students" type="number" min="0" value={numberOfStudents} onChange={e => setNumberOfStudents(e.target.value)} placeholder="e.g. 500" className="mt-1" />
             </div>
 
+            {/* Field 4b — Number of Staff */}
+            <div>
+              <Label htmlFor="num-staff">Number of Staff</Label>
+              <Input id="num-staff" type="number" min="0" value={numberOfStaff} onChange={e => setNumberOfStaff(e.target.value)} placeholder="e.g. 30" className="mt-1" />
+            </div>
+
             {/* Field 5 — Meals Per Day */}
             <div>
               <Label>Meals Served Per Day</Label>
@@ -268,19 +278,17 @@ export default function InstitutionSetup() {
                 </div>
 
                 {/* Kitchen Condition */}
-                {hasDedicatedKitchen === "yes" && (
-                  <div>
-                    <Label>Kitchen Condition</Label>
-                    <Select value={kitchenCondition} onValueChange={setKitchenCondition}>
-                      <SelectTrigger className="mt-1"><SelectValue placeholder="Select condition" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="clean_ready">Clean and ready</SelectItem>
-                        <SelectItem value="minor_renovation">Minor renovation needed</SelectItem>
-                        <SelectItem value="major_renovation">Major renovation needed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
+                <div>
+                  <Label>Kitchen Condition</Label>
+                  <Select value={kitchenCondition} onValueChange={setKitchenCondition}>
+                    <SelectTrigger className="mt-1"><SelectValue placeholder="Select condition" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="clean_ready">Clean and ready</SelectItem>
+                      <SelectItem value="minor_renovation">Minor renovation needed</SelectItem>
+                      <SelectItem value="major_renovation">Major renovation needed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
                 {/* Financing Preference */}
                 <div>
@@ -338,6 +346,15 @@ export default function InstitutionSetup() {
               <div>
                 <Label htmlFor="sub-county">Sub-County</Label>
                 <Input id="sub-county" value={subCounty} onChange={e => setSubCounty(e.target.value)} placeholder="e.g. Isiolo Central" className="mt-1" />
+              </div>
+            </div>
+
+            {/* Transition Needs */}
+            <div className="pt-2 border-t">
+              <p className="text-sm font-semibold text-muted-foreground mb-3">Transition Needs</p>
+              <div>
+                <Label htmlFor="transition-needs">What do you need for transitioning to clean cooking?</Label>
+                <Textarea id="transition-needs" value={transitionNeeds} onChange={e => setTransitionNeeds(e.target.value)} placeholder="e.g. We need an industrial LPG stove system, installation support, and staff training..." rows={3} className="mt-1" />
               </div>
             </div>
 
