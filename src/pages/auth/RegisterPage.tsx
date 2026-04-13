@@ -38,6 +38,9 @@ export default function RegisterPage() {
     e.preventDefault();
     if (password.length < 8) { toast.error("Password must be at least 8 characters"); return; }
     setLoading(true);
+
+    const requestedRole = selectedRole || (orgType === "institution" ? "institution_admin" : undefined);
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -48,7 +51,7 @@ export default function RegisterPage() {
           org_type: orgType,
           org_name: orgName,
           phone,
-          requested_role: selectedRole || undefined,
+          requested_role: requestedRole,
         },
       },
     });

@@ -31,43 +31,48 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch roles to determine redirect
-    const { data: rolesData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
+    const [{ data: rolesData }, { data: profileData }] = await Promise.all([
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId),
+      supabase
+        .from("profiles")
+        .select("org_type")
+        .eq("user_id", userId)
+        .maybeSingle(),
+    ]);
 
-    const roles = rolesData?.map((r: any) => r.role) ?? [];
+    const roles = rolesData?.map((r: { role: string }) => r.role) ?? [];
+    const profileOrgType = profileData?.org_type ?? null;
 
     const isAdmin = roles.some((r: string) =>
       ["admin", "manager", "field_agent"].includes(r)
     );
-    const isInstitutionUser = roles.some((r: string) =>
-      ["institution_admin", "institution_user"].includes(r)
-    );
+    const isInstitutionUser =
+      roles.some((r: string) => ["institution_admin", "institution_user"].includes(r)) ||
+      profileOrgType === "institution";
 
     setLoading(false);
     toast.success("Logged in successfully");
 
-    if (isAdmin) {
-      navigate("/admin/pipeline");
-    } else if (isInstitutionUser) {
-      // Check if setup is completed
+    if (isInstitutionUser) {
       const { data: inst } = await supabase
         .from("institutions")
         .select("setup_completed")
         .eq("created_by", userId)
         .maybeSingle();
 
-      if (inst?.setup_completed) {
-        navigate("/institution/dashboard");
-      } else {
-        navigate("/institution/setup");
-      }
-    } else {
-      // Default: admin pipeline for other authenticated roles
-      navigate("/admin/pipeline");
+      navigate(inst?.setup_completed ? "/institution/dashboard" : "/institution/setup");
+      return;
     }
+
+    if (isAdmin) {
+      navigate("/admin/pipeline");
+      return;
+    }
+
+    navigate("/admin/pipeline");
   };
 
   const handleMagicLink = async () => {
