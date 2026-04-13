@@ -38,7 +38,7 @@ export default function LoginPage() {
         .eq("user_id", userId),
       supabase
         .from("profiles")
-        .select("org_type")
+        .select("org_type, organisation_id")
         .eq("user_id", userId)
         .maybeSingle(),
     ]);
@@ -54,11 +54,15 @@ export default function LoginPage() {
       roles.some((r: string) => ["institution_admin", "institution_user"].includes(r)) ||
       profileOrgType === "institution" ||
       metadataOrgType === "institution";
+    const isSupplier =
+      roles.some((r: string) => ["ta_provider"].includes(r)) ||
+      profileOrgType === "supplier" ||
+      metadataOrgType === "supplier";
 
     setLoading(false);
     toast.success("Logged in successfully");
 
-    // Admin roles take priority — always route to admin dashboard
+    // Admin roles take priority
     if (isAdmin) {
       navigate("/admin/pipeline");
       return;
@@ -72,6 +76,16 @@ export default function LoginPage() {
         .maybeSingle();
 
       navigate(inst?.setup_completed ? "/institution/dashboard" : "/institution/setup");
+      return;
+    }
+
+    if (isSupplier) {
+      // Check if supplier has set up their company (has an organisation linked)
+      if (profileData?.organisation_id) {
+        navigate("/supplier/dashboard");
+      } else {
+        navigate("/supplier/setup");
+      }
       return;
     }
 

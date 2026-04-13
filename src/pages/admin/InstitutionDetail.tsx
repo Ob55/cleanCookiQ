@@ -1,12 +1,20 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+import { useState } from "react";
 import {
   ArrowLeft, Building2, MapPin, Flame, Users, Loader2, UserCheck,
   Phone, Mail, Clock, Utensils, Leaf, DollarSign, Camera, FileText,
-  BarChart3, Gauge,
+  BarChart3, Gauge, Plus, Bell, Factory,
 } from "lucide-react";
 
 const FUEL_LABELS: Record<string, string> = {
@@ -27,6 +35,13 @@ export default function InstitutionDetail() {
     enabled: !!id,
   });
 
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const [needDialogOpen, setNeedDialogOpen] = useState(false);
+  const [needDesc, setNeedDesc] = useState("");
+  const [needTech, setNeedTech] = useState("");
+  const [needSaving, setNeedSaving] = useState(false);
+
   const { data: scores } = useQuery({
     queryKey: ["readiness_scores", id],
     queryFn: async () => {
@@ -35,6 +50,35 @@ export default function InstitutionDetail() {
     },
     enabled: !!id,
   });
+
+  const { data: needs } = useQuery({
+    queryKey: ["institution_needs", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("institution_needs")
+        .select("*, supplier_interest(*, providers(name))")
+        .eq("institution_id", id!)
+        .order("created_at", { ascending: false });
+      return data ?? [];
+    },
+    enabled: !!id,
+  });
+
+  const addNeed = async () => {
+    if (!needDesc.trim() || !id || !user) return;
+    setNeedSaving(true);
+    const { error } = await supabase.from("institution_needs").insert({
+      institution_id: id,
+      description: needDesc.trim(),
+      technology_type: needTech || null,
+      created_by: user.id,
+    });
+    setNeedSaving(false);
+    if (error) { toast.error(error.message); return; }
+    setNeedDesc(""); setNeedTech(""); setNeedDialogOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["institution_needs", id] });
+    toast.success("Need added — suppliers will be notified");
+  };
 
   if (isLoading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   if (!institution) return <div className="text-center py-16"><p>Institution not found</p></div>;
@@ -195,6 +239,73 @@ export default function InstitutionDetail() {
           </CardContent>
         </Card>
       )}
+
+      {/* Institution Needs */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2"><Bell className="h-4 w-4 text-accent" /> Institution Needs</CardTitle>
+            <Dialog open={needDialogOpen} onOpenChange={setNeedDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add Need</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add Institution Need</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label>Description</Label>
+                    <Textarea value={needDesc} onChange={e => setNeedDesc(e.target.value)} placeholder="What does this institution need?" className="mt-1" rows={3} />
+                  </div>
+                  <div>
+                    <Label>Technology Type (optional)</Label>
+                    <Input value={needTech} onChange={e => setNeedTech(e.target.value)} placeholder="e.g. Solar Cookstove, LPG System" className="mt-1" />
+                  </div>
+                  <Button onClick={addNeed} className="w-full" disabled={needSaving || !needDesc.trim()}>
+                    {needSaving && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                    Add Need
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {!needs || needs.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">No needs added yet. Add what this institution requires so suppliers can respond.</p>
+          ) : (
+            <div className="space-y-3">
+              {needs.map((need: any) => (
+                <div key={need.id} className="border border-border rounded-lg p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-medium">{need.description}</p>
+                      {need.technology_type && <Badge variant="secondary" className="mt-1 text-xs">{need.technology_type}</Badge>}
+                    </div>
+                    <Badge variant={need.status === "open" ? "default" : "outline"}>{need.status}</Badge>
+                  </div>
+                  {need.supplier_interest && need.supplier_interest.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1">
+                        <Factory className="h-3 w-3" /> Interested Suppliers ({need.supplier_interest.length})
+                      </p>
+                      <div className="space-y-1">
+                        {need.supplier_interest.map((si: any) => (
+                          <div key={si.id} className="flex items-center justify-between text-sm">
+                            <span className="font-medium">{si.providers?.name ?? "Unknown"}</span>
+                            <Badge className="text-xs bg-green-500/10 text-green-600 border-green-500/20">{si.status}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

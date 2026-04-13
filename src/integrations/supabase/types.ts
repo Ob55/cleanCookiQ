@@ -323,6 +323,47 @@ export type Database = {
           },
         ]
       }
+      institution_needs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          institution_id: string
+          status: string
+          technology_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          institution_id: string
+          status?: string
+          technology_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          institution_id?: string
+          status?: string
+          technology_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institution_needs_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institutions: {
         Row: {
           annual_savings_ksh: number | null
@@ -832,6 +873,126 @@ export type Database = {
           },
         ]
       }
+      provider_documents: {
+        Row: {
+          created_at: string
+          created_by: string
+          document_type: string | null
+          file_url: string | null
+          id: string
+          provider_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          document_type?: string | null
+          file_url?: string | null
+          id?: string
+          provider_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          document_type?: string | null
+          file_url?: string | null
+          id?: string
+          provider_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_documents_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_products: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          price: number | null
+          provider_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          price?: number | null
+          provider_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number | null
+          provider_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_products_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_services: {
+        Row: {
+          created_at: string
+          created_by: string
+          details: string | null
+          id: string
+          name: string
+          provider_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          details?: string | null
+          id?: string
+          name: string
+          provider_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          details?: string | null
+          id?: string
+          name?: string
+          provider_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_services_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       providers: {
         Row: {
           contact_email: string | null
@@ -1010,6 +1171,51 @@ export type Database = {
             columns: ["rfq_id"]
             isOneToOne: false
             referencedRelation: "procurement_rfqs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supplier_interest: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          need_id: string
+          provider_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          need_id: string
+          provider_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          need_id?: string
+          provider_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_interest_need_id_fkey"
+            columns: ["need_id"]
+            isOneToOne: false
+            referencedRelation: "institution_needs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_interest_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
             referencedColumns: ["id"]
           },
         ]
