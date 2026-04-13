@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import PublicLayout from "@/components/layouts/PublicLayout";
 import AdminLayout from "@/components/layouts/AdminLayout";
 import InstitutionLayout from "@/components/layouts/InstitutionLayout";
+import SupplierLayout from "@/components/layouts/SupplierLayout";
 
 import HomePage from "@/pages/HomePage";
 import MapPage from "@/pages/MapPage";
@@ -46,6 +47,12 @@ import InstitutionProfile from "@/pages/institution/InstitutionProfile";
 import CookingAlchemy from "@/pages/institution/CookingAlchemy";
 import InstitutionDocuments from "@/pages/institution/InstitutionDocuments";
 import InstitutionSupport from "@/pages/institution/InstitutionSupport";
+
+import SupplierSetup from "@/pages/supplier/SupplierSetup";
+import SupplierDashboard from "@/pages/supplier/SupplierDashboard";
+import SupplierProducts from "@/pages/supplier/SupplierProducts";
+import SupplierServices from "@/pages/supplier/SupplierServices";
+import SupplierDocuments from "@/pages/supplier/SupplierDocuments";
 
 import NotFound from "@/pages/NotFound";
 
@@ -98,6 +105,19 @@ const App = () => (
               <Route path="/institution/alchemy" element={<CookingAlchemy />} />
               <Route path="/institution/documents" element={<InstitutionDocuments />} />
               <Route path="/institution/support" element={<InstitutionSupport />} />
+            </Route>
+
+            {/* Supplier Setup (no sidebar) */}
+            <Route path="/supplier/setup" element={
+              <ProtectedRoute><SupplierSetup /></ProtectedRoute>
+            } />
+
+            {/* Supplier pages (with sidebar) */}
+            <Route element={<ProtectedRoute><SupplierLayout /></ProtectedRoute>}>
+              <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
+              <Route path="/supplier/products" element={<SupplierProducts />} />
+              <Route path="/supplier/services" element={<SupplierServices />} />
+              <Route path="/supplier/documents" element={<SupplierDocuments />} />
             </Route>
 
             {/* Admin pages (protected) */}
