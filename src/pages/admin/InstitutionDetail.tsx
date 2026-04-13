@@ -1,12 +1,20 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+import { useState } from "react";
 import {
   ArrowLeft, Building2, MapPin, Flame, Users, Loader2, UserCheck,
   Phone, Mail, Clock, Utensils, Leaf, DollarSign, Camera, FileText,
-  BarChart3, Gauge,
+  BarChart3, Gauge, Plus, Bell, Factory,
 } from "lucide-react";
 
 const FUEL_LABELS: Record<string, string> = {
