@@ -159,6 +159,71 @@ export default function InstitutionDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Contact & Location */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base font-semibold">Contact Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <User className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">Contact Person</p>
+                <p className="text-sm font-medium">{institution.contact_person || "—"}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">Phone</p>
+                <p className="text-sm font-medium">{institution.contact_phone || "—"}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">Email</p>
+                <p className="text-sm font-medium">{institution.contact_email || "—"}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base font-semibold">Location</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">County</p>
+                <p className="text-sm font-medium">{institution.county}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">Sub-County</p>
+                <p className="text-sm font-medium">{institution.sub_county || "—"}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+              <div>
+                <p className="text-xs text-muted-foreground">Coordinates</p>
+                <p className="text-sm font-medium">
+                  {institution.latitude && institution.longitude
+                    ? `${institution.latitude}, ${institution.longitude}`
+                    : "—"}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
