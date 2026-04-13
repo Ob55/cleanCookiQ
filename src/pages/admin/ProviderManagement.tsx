@@ -24,27 +24,15 @@ const NDA_TEXT = `NON-DISCLOSURE AGREEMENT (NDA)\n\nThis Non-Disclosure Agreemen
 
 const MOU_TEXT = `MEMORANDUM OF UNDERSTANDING (MoU)\n\nThis Memorandum of Understanding establishes the terms of participation on the CleanCookIQ platform.\n\n1. SCOPE: The Provider agrees to participate in the CleanCookIQ marketplace as a verified service provider.\n\n2. OBLIGATIONS:\n   a) Maintain accurate and up-to-date profile information\n   b) Respond to opportunity notifications within agreed timelines\n   c) Deliver services to the standards specified in awarded contracts\n   d) Participate in platform quality reviews and ratings\n\n3. PLATFORM COMMITMENTS:\n   a) CleanCookIQ will provide fair and transparent matching\n   b) Pipeline data shared will be verified and accurate\n   c) Payment terms will be clearly defined per engagement\n\n4. TERMINATION: Either party may terminate with 30 days written notice.\n\n5. DISPUTE RESOLUTION: Disputes will be resolved through mediation before escalation.`;
 
-interface ProviderDetail {
-  products: any[];
-  services: any[];
-  documents: any[];
-}
-
 export default function ProviderManagement() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filterVerified, setFilterVerified] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [showAdd, setShowAdd] = useState(false);
   const [ndaChecked, setNdaChecked] = useState(false);
   const [mouChecked, setMouChecked] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState<any | null>(null);
-  const [providerDetail, setProviderDetail] = useState<ProviderDetail | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [showLegalDialog, setShowLegalDialog] = useState(false);
-  const [legalProvider, setLegalProvider] = useState<any | null>(null);
-  const [legalNda, setLegalNda] = useState(false);
-  const [legalMou, setLegalMou] = useState(false);
   const [newProvider, setNewProvider] = useState({
     name: "", contact_person: "", contact_email: "", contact_phone: "",
     website: "", services: [] as string[], technology_types: [] as string[],
