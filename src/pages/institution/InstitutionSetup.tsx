@@ -201,6 +201,12 @@ export default function InstitutionSetup() {
               <Input id="num-students" type="number" min="0" value={numberOfStudents} onChange={e => setNumberOfStudents(e.target.value)} placeholder="e.g. 500" className="mt-1" />
             </div>
 
+            {/* Field 4b — Number of Staff */}
+            <div>
+              <Label htmlFor="num-staff">Number of Staff</Label>
+              <Input id="num-staff" type="number" min="0" value={numberOfStaff} onChange={e => setNumberOfStaff(e.target.value)} placeholder="e.g. 30" className="mt-1" />
+            </div>
+
             {/* Field 5 — Meals Per Day */}
             <div>
               <Label>Meals Served Per Day</Label>
