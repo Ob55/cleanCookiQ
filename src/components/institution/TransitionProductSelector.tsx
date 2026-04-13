@@ -23,7 +23,7 @@ export default function TransitionProductSelector({ institutionId, editable = tr
     queryFn: async () => {
       const { data, error } = await supabase
         .from("institution_selected_products")
-        .select("*, provider_products(*, providers(name))")
+        .select("*, provider_products(*, providers(name, contact_phone))")
         .eq("institution_id", institutionId);
       if (error) throw error;
       return (data ?? []).map((sp: any) => ({ ...sp, type: "product" as const }));
@@ -37,7 +37,7 @@ export default function TransitionProductSelector({ institutionId, editable = tr
     queryFn: async () => {
       const { data, error } = await supabase
         .from("institution_selected_services" as any)
-        .select("*, provider_services(*, providers(name))")
+        .select("*, provider_services(*, providers(name, contact_phone))")
         .eq("institution_id", institutionId);
       if (error) throw error;
       return ((data as any[]) ?? []).map((ss: any) => ({ ...ss, type: "service" as const }));
