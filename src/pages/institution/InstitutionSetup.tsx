@@ -55,7 +55,8 @@ export default function InstitutionSetup() {
   const [contactPerson, setContactPerson] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
-
+  const [numberOfStaff, setNumberOfStaff] = useState("");
+  const [transitionNeeds, setTransitionNeeds] = useState("");
   // Assessment scoring fields
   const [numberOfStudents, setNumberOfStudents] = useState("");
   const [monthlyFuelSpend, setMonthlyFuelSpend] = useState("");
