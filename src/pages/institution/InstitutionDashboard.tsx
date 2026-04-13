@@ -14,6 +14,7 @@ const FUEL_LABELS: Record<string, string> = {
 interface Institution {
   name: string;
   county: string;
+  sub_county: string | null;
   ownership_type: string | null;
   meals_per_day: number | null;
   current_fuel: string | null;
@@ -29,6 +30,8 @@ interface Institution {
   recommended_solution: string | null;
   annual_savings_ksh: number | null;
   co2_reduction_tonnes_pa: number | null;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 function computeCompletion(inst: Institution): number {
