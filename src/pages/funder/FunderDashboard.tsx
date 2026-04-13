@@ -37,10 +37,10 @@ export default function FunderDashboard() {
   const { data: institutions, isLoading: instLoading } = useQuery({
     queryKey: ["funder-institutions"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase
         .from("institutions")
-        .select("*")
-        .in("transition_interest" as any, ["yes", "maybe"])
+        .select("*") as any)
+        .in("transition_interest", ["yes", "maybe"])
         .order("name");
       if (error) throw error;
       return data as any[];
