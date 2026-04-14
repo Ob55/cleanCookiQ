@@ -24,8 +24,10 @@ export default function PipelineDashboard() {
   institutions?.forEach(i => { stageCounts[i.pipeline_stage] = (stageCounts[i.pipeline_stage] || 0) + 1; });
 
   // Count institutions that have been assessed (have a score > 0 OR are in assessed+ stages)
-  const assessedStages = new Set(["assessed", "scored", "matched", "least_cost_path_assigned", "provider_matched", "negotiation", "financed", "contracted", "in_delivery", "installed", "monitoring", "monitored_dmrv"]);
-  const assessedCount = institutions?.filter(i => (i.assessment_score && Number(i.assessment_score) > 0) || assessedStages.has(i.pipeline_stage)).length ?? 0;
+  const assessedCount = institutions?.filter(i => 
+    i.pipeline_stage === "assessed" || i.pipeline_stage === "scored" || 
+    (i.assessment_score && Number(i.assessment_score) > 0)
+  ).length ?? 0;
 
   const stages = [
     { stage: "Identified", key: "identified" },
