@@ -73,7 +73,8 @@ export default function LoginPage() {
         .from("institutions")
         .select("setup_completed")
         .eq("created_by", userId)
-        .maybeSingle();
+        .limit(1)
+        .single();
 
       navigate(inst?.setup_completed ? "/institution/dashboard" : "/institution/setup");
       return;
