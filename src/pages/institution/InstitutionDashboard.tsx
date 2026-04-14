@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Flame, UtensilsCrossed, Droplets, BarChart3, Loader2, User, Phone, Mail, MapPin } from "lucide-react";
 import CookingAlchemySection from "@/components/institution/CookingAlchemySection";
 import TransitionInterest from "@/components/institution/TransitionInterest";
+import FuelOptionsSection from "@/components/institution/FuelOptionsSection";
 
 const FUEL_LABELS: Record<string, string> = {
   firewood: "Firewood", charcoal: "Charcoal", lpg: "LPG",
@@ -252,6 +253,9 @@ export default function InstitutionDashboard() {
 
       {/* Cooking Alchemy Section */}
       <CookingAlchemySection institution={institution} costModel={costModel} />
+
+      {/* Fuel Options */}
+      <FuelOptionsSection />
 
       {/* Transition Interest */}
       <TransitionInterest
