@@ -31,13 +31,8 @@ export default function PipelineDashboard() {
 
   const stages = [
     { stage: "Identified", key: "identified" },
-    { stage: "Contacted", key: "contacted" },
     { stage: "Assessed / Scored", keys: ["assessed", "scored"] },
-    { stage: "Matched", keys: ["matched", "least_cost_path_assigned", "provider_matched"] },
-    { stage: "Negotiation / Financed", keys: ["negotiation", "financed"] },
-    { stage: "Contracted / Delivery", keys: ["contracted", "in_delivery"] },
     { stage: "Installed", key: "installed" },
-    { stage: "Monitoring", keys: ["monitoring", "monitored_dmrv"] },
   ].map(s => {
     const keys = (s as any).keys || [(s as any).key];
     const count = keys.reduce((sum: number, k: string) => sum + (stageCounts[k] || 0), 0);
