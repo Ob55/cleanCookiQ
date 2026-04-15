@@ -91,8 +91,7 @@ export default function HomePage() {
               <Link to="/auth/register">
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 font-semibold"
+                  className="bg-accent text-accent-foreground hover:bg-amber-light font-semibold"
                 >
                   Join the Platform
                   <ArrowRight className="ml-2 h-4 w-4" />
