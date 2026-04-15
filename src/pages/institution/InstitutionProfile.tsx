@@ -13,7 +13,6 @@ import { Building2, Pencil, Save, X, Loader2, Users, UserCheck, Clock, Camera, B
 import { toast } from "sonner";
 import { calculateAssessmentScore } from "@/lib/assessmentScoring";
 import TransitionNeedsSection from "@/components/institution/TransitionNeedsSection";
-import TransitionProductSelector from "@/components/institution/TransitionProductSelector";
 
 const FUEL_LABELS: Record<string, string> = {
   firewood: "Firewood", charcoal: "Charcoal", lpg: "LPG",
