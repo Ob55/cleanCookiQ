@@ -28,6 +28,7 @@ async function notifyInstitutionOwner(institutionId: string, title: string, body
 
 export default function FunderDashboard() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: funderProfile, isLoading: fpLoading } = useQuery({
