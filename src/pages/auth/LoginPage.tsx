@@ -6,6 +6,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff } from "lucide-react";
+import ignisLogo from "@/assets/ignis-logo.png";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -118,15 +119,13 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-display font-bold text-lg">C</span>
-            </div>
+            <img src={ignisLogo} alt="CleanCookIQ" className="h-12 w-auto" />
             <span className="font-display font-bold text-xl">
               CleanCook<span className="text-accent">IQ</span>
             </span>
           </Link>
           <h1 className="text-2xl font-display font-bold">Welcome back</h1>
-          <p className="text-sm text-muted-foreground mt-1">Log in to your CleanCookIQ account</p>
+          <p className="text-sm text-muted-foreground mt-1">Log in to your Project Compass account</p>
         </div>
 
         <div className="bg-card border border-border rounded-xl p-6 shadow-card">
