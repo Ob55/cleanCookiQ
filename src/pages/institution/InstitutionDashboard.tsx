@@ -57,7 +57,6 @@ export default function InstitutionDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [institution, setInstitution] = useState<Institution | null>(null);
-  const [costModel, setCostModel] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -91,14 +90,6 @@ export default function InstitutionDashboard() {
       const inst = data as any;
       setInstitution(inst as Institution | null);
 
-      if (inst?.id) {
-        const { data: cm } = await supabase
-          .from("cost_models")
-          .select("capex, monthly_opex, projected_monthly_savings")
-          .eq("institution_id", inst.id)
-          .maybeSingle();
-        setCostModel(cm);
-      }
       setLoading(false);
     })();
   }, [user]);
