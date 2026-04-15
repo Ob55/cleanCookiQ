@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Plus, FileCheck, Loader2, Upload, Image, ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { useInstitution } from "@/hooks/useInstitution";
+import { useInstitutionId } from "@/hooks/useInstitution";
 
 interface Doc {
   id: string;
@@ -20,7 +20,7 @@ interface Doc {
 
 export default function InstitutionDocuments() {
   const { user } = useAuth();
-  const { institution, loading: instLoading } = useInstitution();
+  const { institutionId, loading: instLoading } = useInstitutionId();
   const [docs, setDocs] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
