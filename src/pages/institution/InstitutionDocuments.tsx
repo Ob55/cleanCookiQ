@@ -43,7 +43,7 @@ export default function InstitutionDocuments() {
   }, [institutionId]);
 
   const handleUpload = async () => {
-    if (!institution?.id || !user || !title.trim() || !file) return;
+    if (!institutionId || !user || !title.trim() || !file) return;
     setSaving(true);
 
     const ext = file.name.split(".").pop();
