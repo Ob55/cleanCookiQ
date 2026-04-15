@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import NotificationBell from "@/components/NotificationBell";
+import ignisLogo from "@/assets/ignis-logo.png";
 
 const supplierNav = [
   { label: "Dashboard", href: "/supplier/dashboard", icon: LayoutDashboard },
@@ -47,9 +48,7 @@ export default function SupplierLayout() {
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-sidebar-border">
         <Link to="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
-            <span className="font-display font-bold text-sm text-sidebar-primary-foreground">C</span>
-          </div>
+          <img src={ignisLogo} alt="Ignis Logo" className="h-8 w-8 rounded-lg object-contain" />
           <span className="font-display font-bold text-lg text-sidebar-foreground">
             CleanCook<span className="text-sidebar-primary">IQ</span>
           </span>
