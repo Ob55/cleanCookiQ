@@ -56,6 +56,7 @@ function computeCompletion(inst: Institution): number {
 
 export default function InstitutionDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [institution, setInstitution] = useState<Institution | null>(null);
   const [costModel, setCostModel] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -112,7 +113,8 @@ export default function InstitutionDashboard() {
   }
 
   if (!institution) {
-    return <p className="text-muted-foreground">No institution found. Please complete setup first.</p>;
+    navigate("/institution/setup", { replace: true });
+    return null;
   }
 
   const completion = computeCompletion(institution);
