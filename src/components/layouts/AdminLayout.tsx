@@ -20,7 +20,6 @@ const adminNav = [
   { label: "Portfolio", href: "/admin/portfolio", icon: Briefcase },
   { label: "Tickets", href: "/admin/tickets", icon: Ticket },
   { label: "Users", href: "/admin/users", icon: Users },
-  { label: "Cost Tables", href: "/admin/engine/costs", icon: LayoutDashboard },
 ];
 
 export default function AdminLayout() {

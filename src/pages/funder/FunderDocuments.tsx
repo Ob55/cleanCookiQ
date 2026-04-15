@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Plus, FileCheck, Loader2, Upload, Image, ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { useInstitutionId } from "@/hooks/useInstitution";
 
 interface Doc {
   id: string;
@@ -18,9 +17,8 @@ interface Doc {
   created_at: string;
 }
 
-export default function InstitutionDocuments() {
+export default function FunderDocuments() {
   const { user } = useAuth();
-  const { institutionId, loading: instLoading } = useInstitutionId();
   const [docs, setDocs] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -29,21 +27,21 @@ export default function InstitutionDocuments() {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (!institutionId) return;
+    if (!user) return;
     const load = async () => {
       const { data } = await supabase
         .from("institution_documents")
         .select("*")
-        .eq("institution_id", institutionId)
+        .eq("uploaded_by", user.id)
         .order("created_at", { ascending: false });
       setDocs(data ?? []);
       setLoading(false);
     };
     load();
-  }, [institutionId]);
+  }, [user]);
 
   const handleUpload = async () => {
-    if (!institutionId || !user || !title.trim() || !file) return;
+    if (!user || !title.trim() || !file) return;
     setSaving(true);
 
     const ext = file.name.split(".").pop();
@@ -53,11 +51,10 @@ export default function InstitutionDocuments() {
     const { data: urlData } = supabase.storage.from("institution-assets").getPublicUrl(path);
 
     const { data, error } = await supabase.from("institution_documents").insert({
-      institution_id: institutionId,
       title: title.trim(),
       file_url: urlData.publicUrl,
       uploaded_by: user.id,
-    }).select().single();
+    } as any).select().single();
 
     setSaving(false);
     if (error) { toast.error(error.message); return; }
@@ -68,21 +65,14 @@ export default function InstitutionDocuments() {
     toast.success("Document uploaded!");
   };
 
-  const handleDelete = async (docId: string) => {
-    const { error } = await supabase.from("institution_documents").delete().eq("id", docId);
-    if (error) { toast.error(error.message); return; }
-    setDocs(prev => prev.filter(d => d.id !== docId));
-    toast.success("Document deleted");
-  };
-
-  if (instLoading || loading) return <div className="flex items-center justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+  if (loading) return <div className="flex items-center justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-display font-bold">Documents</h1>
-          <p className="text-muted-foreground text-sm mt-1">Upload and manage your institution documents</p>
+          <p className="text-muted-foreground text-sm mt-1">Upload and manage your documents</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -93,7 +83,7 @@ export default function InstitutionDocuments() {
             <div className="space-y-4">
               <div>
                 <Label>Title</Label>
-                <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Kitchen inspection report" className="mt-1" />
+                <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Due diligence report" className="mt-1" />
               </div>
               <div>
                 <Label>File (Image or PDF)</Label>
@@ -135,7 +125,12 @@ export default function InstitutionDocuments() {
                       <ExternalLink className="h-3 w-3" /> View
                     </a>
                   )}
-                  <Button variant="ghost" size="sm" className="text-destructive h-7 px-2" onClick={() => handleDelete(doc.id)}>
+                  <Button variant="ghost" size="sm" className="text-destructive h-7 px-2" onClick={async () => {
+                    const { error } = await supabase.from("institution_documents").delete().eq("id", doc.id);
+                    if (error) { toast.error(error.message); return; }
+                    setDocs(prev => prev.filter(d => d.id !== doc.id));
+                    toast.success("Deleted");
+                  }}>
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>

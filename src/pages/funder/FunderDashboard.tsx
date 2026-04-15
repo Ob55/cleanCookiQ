@@ -4,8 +4,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, MapPin, Flame, BarChart3, Droplets, Banknote, Link2, Unlink } from "lucide-react";
+import { Loader2, MapPin, Flame, BarChart3, Droplets, Banknote, Link2, Unlink, Search } from "lucide-react";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { notifyAdmins } from "@/lib/notifications";
 
 const FUEL_LABELS: Record<string, string> = {
@@ -27,6 +29,7 @@ async function notifyInstitutionOwner(institutionId: string, title: string, body
 export default function FunderDashboard() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: funderProfile, isLoading: fpLoading } = useQuery({
     queryKey: ["funder-profile", user?.id],
@@ -183,6 +186,15 @@ export default function FunderDashboard() {
     "Longer-Term Opportunity": "bg-muted text-muted-foreground",
   };
 
+
+  const filteredInstitutions = institutions
+    ?.filter((inst: any) => !isLinkedByAnother(inst.id))
+    .filter((inst: any) => {
+      if (!searchTerm) return true;
+      const q = searchTerm.toLowerCase();
+      return inst.name?.toLowerCase().includes(q) || inst.county?.toLowerCase().includes(q);
+    });
+
   return (
     <div className="space-y-6">
       <div>
@@ -192,13 +204,16 @@ export default function FunderDashboard() {
         </p>
       </div>
 
-      {!institutions?.length ? (
-        <p className="text-muted-foreground">No institutions are currently seeking transition support.</p>
+      <div className="relative max-w-sm">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input placeholder="Search institutions..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-9" />
+      </div>
+
+      {!filteredInstitutions?.length ? (
+        <p className="text-muted-foreground">No institutions found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {institutions
-            .filter((inst: any) => !isLinkedByAnother(inst.id))
-            .map((inst: any) => {
+          {filteredInstitutions.map((inst: any) => {
             const score = inst.assessment_score || getScore(inst.id);
             const linked = isLinked(inst.id);
             const isReady = inst.transition_interest === "yes";

@@ -1,0 +1,1 @@
+ALTER TABLE public.institution_documents ALTER COLUMN institution_id DROP NOT NULL;
