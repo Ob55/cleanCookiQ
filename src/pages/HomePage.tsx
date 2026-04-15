@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MapPin, BarChart3, Users, TrendingUp, Leaf, Building2, ArrowRight, Flame, Factory, Banknote, Briefcase, FolderKanban, GraduationCap, UserPlus, ClipboardCheck, Handshake, Rocket, Activity } from "lucide-react";
 import FuelOptionsSection from "@/components/institution/FuelOptionsSection";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useAuth } from "@/contexts/AuthContext";
 
 const stats = [
   { label: "Institutions Tracked", value: "2,847", icon: Building2 },
@@ -52,6 +53,15 @@ const modules = [
 ];
 
 export default function HomePage() {
+  const { user, profile, roles, loading } = useAuth();
+
+  if (!loading && user) {
+    if (roles.includes("admin")) return <Navigate to="/admin/pipeline" replace />;
+    if (profile?.org_type === "institution") return <Navigate to="/institution/dashboard" replace />;
+    if (profile?.org_type === "supplier") return <Navigate to="/supplier/dashboard" replace />;
+    if (profile?.org_type === "funder") return <Navigate to="/funder/dashboard" replace />;
+  }
+
   return (
     <div>
       {/* Hero */}
@@ -91,8 +101,7 @@ export default function HomePage() {
               <Link to="/auth/register">
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 font-semibold"
+                  className="bg-accent text-accent-foreground hover:bg-amber-light font-semibold"
                 >
                   Join the Platform
                   <ArrowRight className="ml-2 h-4 w-4" />
