@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, FlaskConical, TrendingDown, Leaf, DollarSign, Flame, Zap } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const FUEL_LABELS: Record<string, string> = {
   firewood: "Firewood", charcoal: "Charcoal", lpg: "LPG",
@@ -191,30 +191,28 @@ export default function CookingAlchemy() {
         </CardContent>
       </Card>
 
-      {/* 5-Year Projection */}
+      {/* 5-Year Cost Comparison Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">5-Year Savings Projection</CardTitle>
+          <CardTitle className="text-lg">5-Year Cost Comparison</CardTitle>
+          <CardDescription>Current cooking cost vs clean cooking cost over 5 years</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map(year => {
-              const cumSavings = annualSavings * year;
-              const pct = Math.min((cumSavings / (currentCostPerYear * 5)) * 100, 100);
-              return (
-                <div key={year} className="flex items-center gap-4">
-                  <span className="text-sm font-medium w-16">Year {year}</span>
-                  <div className="flex-1 bg-muted rounded-full h-4 overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                  <span className="text-sm font-bold w-32 text-right">{formatKSh(cumSavings)}</span>
-                </div>
-              );
-            })}
-          </div>
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={[1, 2, 3, 4, 5].map(year => ({
+              name: `Year ${year}`,
+              "Current Cooking Cost": currentCostPerYear * year,
+              "With Clean Cooking": cleanCostPerYear * year,
+            }))}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="name" className="text-xs" />
+              <YAxis tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}K`} className="text-xs" />
+              <Tooltip formatter={(value: number) => formatKSh(value)} />
+              <Legend />
+              <Bar dataKey="Current Cooking Cost" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="With Clean Cooking" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </CardContent>
       </Card>
 

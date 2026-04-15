@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Flame, UtensilsCrossed, Droplets, BarChart3, Loader2, User, Phone, Mail, MapPin } from "lucide-react";
-import CookingAlchemySection from "@/components/institution/CookingAlchemySection";
+
 
 const FUEL_LABELS: Record<string, string> = {
   firewood: "Firewood", charcoal: "Charcoal", lpg: "LPG",
@@ -272,8 +272,6 @@ export default function InstitutionDashboard() {
         </Card>
       </div>
 
-      {/* Cooking Counting Section */}
-      <CookingAlchemySection institution={institution} costModel={costModel} />
     </div>
   );
 }
