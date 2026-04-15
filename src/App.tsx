@@ -115,7 +115,7 @@ const App = () => (
               <Route path="/institution/profile" element={<InstitutionProfile />} />
               <Route path="/institution/alchemy" element={<CookingAlchemy />} />
               <Route path="/institution/documents" element={<InstitutionDocuments />} />
-              <Route path="/institution/support" element={<InstitutionSupport />} />
+              <Route path="/institution/support" element={<TicketsPage />} />
             </Route>
 
             {/* Supplier Setup (no sidebar) */}
