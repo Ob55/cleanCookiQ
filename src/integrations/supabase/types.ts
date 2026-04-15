@@ -400,7 +400,7 @@ export type Database = {
           created_at: string
           file_url: string | null
           id: string
-          institution_id: string
+          institution_id: string | null
           title: string
           uploaded_by: string
         }
@@ -408,7 +408,7 @@ export type Database = {
           created_at?: string
           file_url?: string | null
           id?: string
-          institution_id: string
+          institution_id?: string | null
           title: string
           uploaded_by: string
         }
@@ -416,7 +416,7 @@ export type Database = {
           created_at?: string
           file_url?: string | null
           id?: string
-          institution_id?: string
+          institution_id?: string | null
           title?: string
           uploaded_by?: string
         }
