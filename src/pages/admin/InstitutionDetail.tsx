@@ -87,6 +87,19 @@ export default function InstitutionDetail() {
     enabled: !!id,
   });
 
+  const { data: instDocs } = useQuery({
+    queryKey: ["institution_documents", id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("institution_documents")
+        .select("*")
+        .eq("institution_id", id!)
+        .order("created_at", { ascending: false });
+      return data ?? [];
+    },
+    enabled: !!id,
+  });
+
   const { data: needs } = useQuery({
     queryKey: ["institution_needs", id],
     queryFn: async () => {
@@ -385,6 +398,39 @@ export default function InstitutionDetail() {
                         ))}
                       </div>
                     </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Documents */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /> Uploaded Documents</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!instDocs || instDocs.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">No documents uploaded by this institution.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {instDocs.map((doc: any) => (
+                <div key={doc.id} className="border border-border rounded-lg p-3">
+                  <div className="aspect-video bg-muted rounded-lg overflow-hidden mb-2">
+                    {doc.file_url?.match(/\.(jpg|jpeg|png|gif|webp)/i) ? (
+                      <img src={doc.file_url} alt={doc.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <FileText className="h-8 w-8 text-muted-foreground/30" />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm font-medium truncate">{doc.title}</p>
+                  <p className="text-xs text-muted-foreground">{new Date(doc.created_at).toLocaleDateString()}</p>
+                  {doc.file_url && (
+                    <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-1 inline-block">View File</a>
                   )}
                 </div>
               ))}
