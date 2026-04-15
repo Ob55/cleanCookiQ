@@ -29,18 +29,18 @@ export default function InstitutionDocuments() {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (!institution?.id) return;
+    if (!institutionId) return;
     const load = async () => {
       const { data } = await supabase
         .from("institution_documents")
         .select("*")
-        .eq("institution_id", institution.id)
+        .eq("institution_id", institutionId)
         .order("created_at", { ascending: false });
       setDocs(data ?? []);
       setLoading(false);
     };
     load();
-  }, [institution?.id]);
+  }, [institutionId]);
 
   const handleUpload = async () => {
     if (!institution?.id || !user || !title.trim() || !file) return;
@@ -53,7 +53,7 @@ export default function InstitutionDocuments() {
     const { data: urlData } = supabase.storage.from("institution-assets").getPublicUrl(path);
 
     const { data, error } = await supabase.from("institution_documents").insert({
-      institution_id: institution.id,
+      institution_id: institutionId,
       title: title.trim(),
       file_url: urlData.publicUrl,
       uploaded_by: user.id,
