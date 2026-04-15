@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Flame, UtensilsCrossed, Droplets, BarChart3, Loader2, User, Phone, Mail, MapPin } from "lucide-react";
-import CookingAlchemySection from "@/components/institution/CookingAlchemySection";
+
 
 const FUEL_LABELS: Record<string, string> = {
   firewood: "Firewood", charcoal: "Charcoal", lpg: "LPG",
@@ -57,7 +57,6 @@ export default function InstitutionDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [institution, setInstitution] = useState<Institution | null>(null);
-  const [costModel, setCostModel] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -91,14 +90,6 @@ export default function InstitutionDashboard() {
       const inst = data as any;
       setInstitution(inst as Institution | null);
 
-      if (inst?.id) {
-        const { data: cm } = await supabase
-          .from("cost_models")
-          .select("capex, monthly_opex, projected_monthly_savings")
-          .eq("institution_id", inst.id)
-          .maybeSingle();
-        setCostModel(cm);
-      }
       setLoading(false);
     })();
   }, [user]);
@@ -272,8 +263,6 @@ export default function InstitutionDashboard() {
         </Card>
       </div>
 
-      {/* Cooking Counting Section */}
-      <CookingAlchemySection institution={institution} costModel={costModel} />
     </div>
   );
 }
